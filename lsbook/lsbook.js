@@ -2475,7 +2475,7 @@ function handleScrolling() {
     $chapter = $chapters.last();
   }
 
-  setChapterActive($chapter);
+  // setChapterActive($chapter);
 }
 
 /*
@@ -2647,7 +2647,7 @@ function preparePage(resetScroll) {
       }
 
       var resolvedRef = url_lib.resolve(window.location.pathname, href);
-      return window.location.pathname == resolvedRef;
+      return decodeURI(window.location.pathname) == decodeURI(resolvedRef);
     });
 
   // 如果摘要包含到此页面的多个链接，则绑定滚动
@@ -3193,6 +3193,13 @@ lsbook.events.bind('page.change', function () {
 });
 
 /**
+ * 左侧菜单滚动
+ */
+lsbook.events.bind('page.change', function () {
+  setTimeout("var rect = $('.active')[0].getBoundingClientRect();if (rect.top < 0 || rect.bottom > $('.book-summary')[0].getBoundingClientRect().height) {$('.active')[0].scrollIntoView({block: 'nearest', behavior: 'smooth'});}", 500);
+});
+
+/**
  * Prism渲染
  */
 lsbook.events.bind('page.change', function () {
@@ -3333,7 +3340,7 @@ function search() {
           url: page,
           title: store.title,
           body: store.body.substr(Math.max(0, index - 50), MAX_DESCRIPTION_SIZE)
-            // .replace(/^[^\s,.]+./, '').replace(/(..*)[\s,.].*/, '$1') // prevent break word
+          // .replace(/^[^\s,.]+./, '').replace(/(..*)[\s,.].*/, '$1') // prevent break word
             .replace(keywordRe, '<span class="search-highlight-keyword">$1</span>')
         });
       }
@@ -3547,6 +3554,11 @@ function fontsettings() {
       config: 'ant',
       text: 'Ant',
       id: 2
+    },
+    {
+      config: 'ym',
+      text: 'YM',
+      id: 3
     }
   ];
 
@@ -3731,7 +3743,7 @@ function fontsettings() {
 
 fontsettings();
 
-if (location.hash != "") {
+if ("" !== location.hash) {
   // 刷新锚记定位
   setTimeout("getScroller().animate({scrollTop: getElementTopPosition(location.hash)}, 800, 'swing')", 1500);
 }
