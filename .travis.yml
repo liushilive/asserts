@@ -20,6 +20,6 @@ branches:
     - master
 env:
   global:
-    - REF=gitee.com/liushilive/assert.git
+    - REF=gitee.com/liushilive/asserts.git
 before_install:
 - export TZ='Asia/Shanghai'
